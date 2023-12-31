@@ -51,7 +51,7 @@ class loginPage extends StatelessWidget {
                     icon: Icon(Icons.lock),
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 19),
                 ElevatedButton(
                   onPressed: () {
                     _navigateToHomePage(context);
@@ -76,7 +76,7 @@ class loginPage extends StatelessWidget {
   void _navigateToHomePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()), // Ensure correct class name
+      MaterialPageRoute(builder: (context) => HomeScreen()), // Ensure correct class name
     );
   }
 }

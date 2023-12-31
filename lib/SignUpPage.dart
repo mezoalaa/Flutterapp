@@ -84,7 +84,7 @@ class SignUpPage extends StatelessWidget {
   void _navigateToHomePage(BuildContext context) {
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => HomePage()), // Ensure correct class name
+      MaterialPageRoute(builder: (context) => HomeScreen()), // Ensure correct class name
     );
   }
 }

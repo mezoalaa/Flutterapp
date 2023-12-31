@@ -1,64 +1,62 @@
-import 'package:coffeshop/second.dart';
+// main.dart
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'onbording.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      home: const MyHomePage(title: 'Coffe Shop'),
+      home: SplashScreen(),
+      routes: {
+        '/home': (context) => OnBoardingScreen(),
+      },
     );
   }
 }
 
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+class SplashScreen extends StatefulWidget {
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
 
-  final String title;
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Timer(Duration(seconds: 4), () {
+      Navigator.of(context).pushReplacementNamed('/home');
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: Image(
-          image: AssetImage('assets/coffewall.jpg'),
-          fit: BoxFit.cover,
-          height: double.infinity,
-          width: double.infinity,
-          alignment: Alignment.center,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+
+            Image.network(
+                'https://t4.ftcdn.net/jpg/02/67/42/31/360_F_267423185_vVV0AG6YJnVTXOnrTeEkL4fLXT4vJxu5.jpg',
+              errorBuilder: (context, error, stackTrace) {
+                // Handle the error, e.g., display a placeholder image
+                return FlutterLogo(size: 100.0);
+              },
+            ),
+            SizedBox(height: 16.0),
+            Text(
+              'Welcome To Your Dream Home',
+
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold, color: Colors.blueAccent),
+            ),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Call the correct function to navigate to the second page
-          _navigateToSecondPage(context);
-        },
-        tooltip: 'Go to Second Page',
-        child: const Icon(Icons.arrow_forward),
-      ),
-    );
-  }
-
-  // Function to navigate to the second page
-  void _navigateToSecondPage(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => SecondPage()),
     );
   }
 }
-
-
-
-

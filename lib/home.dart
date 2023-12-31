@@ -1,83 +1,197 @@
-
-import 'dart:convert';
-
+//home.dart
+import 'package:realEstate/nextPage.dart';
+import 'package:realEstate/profile.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'ContactUs.dart';
+import 'nextPage.dart';
+import 'profile.dart';
 
-void main() {
-  runApp(HomePage());
+class HomeScreen extends StatefulWidget {
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => _HomePageState();
-}
+class _HomeScreenState extends State<HomeScreen> {
+  int index = 1;
 
-class _HomePageState extends State<HomePage> {
-  int is_loaded = 0;
-  List<Drinks> drinklist = [];
-
-  Future<void> getAllDrinks() async {
-    String path = 'http://127.0.0.1:8000/api/showcoffe/';
-    try {
-      final response = await http.get(Uri.parse(path));
-      if (response.statusCode == 200) {
-        List responseAfterDecode = jsonDecode(response.body);
-        for (var ta in responseAfterDecode) {
-          drinklist.add(Drinks.fromJson(ta));
-        }
-        setState(() {
-          is_loaded = 1;
-        });
-      } else {
-        setState(() {
-          is_loaded = 2;
-        });
-      }
-    } catch (e) {
-      print("Error fetching data: $e");
-      setState(() {
-        is_loaded = 2;
-      });
-    }
-  }
-
-  @override
-  void initState() {
-    getAllDrinks();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: HomeAppBar(),
-      body: SingleChildScrollView(
-        child: Container(
-          padding: EdgeInsets.only(top: 50, left: 20, right: 20),
-          child: Column(
-            children: [
-              TextField(
-                decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search),
-                  border: OutlineInputBorder(),
-                  hintText: 'Search For Your Favourite Drink',
+    return MaterialApp(
+      home: Scaffold(
+        body: Container(
+
+          margin: EdgeInsets.only(top: 50.0, right: 20.0, left: 20.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Text(
+                      "Welcome Mazen alaa",
+                      style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Container(
+                      width: 50.0,
+                      height: 50.0,
+                      margin: EdgeInsets.all(8.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: Colors.purple,
+                        image: DecorationImage(
+                          image: NetworkImage(
+                            "https://images.pexels.com/photos/106399/pexels-photo-106399.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500",
+                          ),
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Text(
+                  "Discover",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 30.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 10.0,
+                ),
+                Text(
+                  "Suitable Home",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 30.0,
+                  ),
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.purple.withOpacity(.5),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30.0),
+                            bottomLeft: Radius.circular(30.0),
+                            bottomRight: Radius.circular(30.0),
+                          ),
+                        ),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(Icons.search),
+                            hintText: "Find Your Home",
+                            border: InputBorder.none,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: 20.0,
+                    ),
+                    Stack(
+                      children: <Widget>[
+                        Icon(Icons.notifications),
+                        Positioned(
+                          top: 1,
+                          right: 1,
+                          child: Container(
+                            padding: EdgeInsets.all(1.2),
+                            child: Text(
+                              "2",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 10.0,
+                              ),
+                            ),
+                            decoration: BoxDecoration(
+                              color: Colors.deepOrange,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 20.0,
+                ),
+                SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      homeWidget(),
+
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.only(bottom: 40.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              index == 1
+                  ? _selectedWidget(Icon(Icons.home), "Home")
+                  : IconButton(
+                icon: Icon(Icons.home),
+                onPressed: () {
+                  setState(() {
+                    index = 1;
+                  });
+                },
               ),
-              SizedBox(
-                height: 21,
+              index == 2
+                  ? _selectedWidget(Icon(Icons.bookmark_border), "Bookmark")
+                  : IconButton(
+                icon: Icon(Icons.bookmark_border),
+                onPressed: () {
+                  setState(() {
+                    index = 2;
+                  });
+                },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  CustomText(text: "Drinks", fontSize: 18),
-                  CustomText(text: "See All", fontSize: 16),
-                ],
+              index == 3
+                  ? _selectedWidget(Icon(Icons.contact_mail_outlined), "Contact US")
+                  : IconButton(
+                icon: Icon(Icons.contact_mail_outlined),
+                onPressed: () {
+                  _navigateToContactUsPage(context);
+                  setState(() {
+                    index = 3;
+                  });
+                },
               ),
-              SizedBox(
-                height: 15,
+              index == 4
+                  ? _selectedWidget(
+                  Icon(Icons.person_outline), "Profile")
+                  : IconButton(
+                icon: Icon(Icons.person_outline),
+                onPressed: () {
+                  _navigateToProfilePage(context);
+                  setState(() {
+                    index = 4;
+                  });
+                },
               ),
-              _listViewProducts(),
             ],
           ),
         ),
@@ -85,154 +199,114 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _listViewProducts() {
-    if (is_loaded == 0) {
-      // Loading state
-      return CircularProgressIndicator();
-    } else if (is_loaded == 2) {
-      // Error state
-      return Text("Error loading data.");
-    } else {
-      // Data loaded successfully
-      return Container(
-        height: 340,
-        child: ListView.separated(
-          itemCount: drinklist.length,
-          scrollDirection: Axis.horizontal,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onTap: () {
-                // Handle item tap
-              },
+  Widget homeWidget() {
+    return InkWell(
+      onTap: () {
+        Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context) {
+          return  NextPage();
+        }));
+      },
+      child: Container(
+        margin: EdgeInsets.all(10),
+        width: 250,
+        height: 350,
+        child: Stack(
+          children: <Widget>[
+            Hero(
+              tag:'https://t4.ftcdn.net/jpg/02/79/95/39/360_F_279953994_TmVqT7CQhWQJRLXev4oFmv8GIZTgJF1d.jpg',
               child: Container(
-                width: MediaQuery.of(context).size.width * .4,
-                child: Column(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(50),
-                        color: Colors.grey.shade100,
-                      ),
-                      child: Container(
-                        height: 220,
-                        width: MediaQuery.of(context).size.width * .4,
-                        child: Image.network(
-                          drinklist[index].coffeeName ?? "",
-                          fit: BoxFit.fill,
-                        ),
-                      ),
+                width: 230.0,
+                height: 250.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(30.0),
+                    bottomLeft: Radius.circular(30.0),
+                    bottomRight: Radius.circular(30.0),
+                  ),
+                  image: DecorationImage(
+                    image: NetworkImage(
+                      'https://t4.ftcdn.net/jpg/02/79/95/39/360_F_279953994_TmVqT7CQhWQJRLXev4oFmv8GIZTgJF1d.jpg',
                     ),
-                    SizedBox(height: 20),
-                    Text(drinklist[index].coffeeName.toString()),
-                    SizedBox(height: 10),
-                    Expanded(
-                      child: Text(
-                        drinklist[index].coffeeFlavor.toString(),
-                        color: Colors.grey,
-                        alignment: Alignment.bottomLeft,
-                      ),
-                    ),
-                    SizedBox(height: 20),
-                    Text(
-                      drinklist[index].coffeePrice.toString() + " \$",
-                      color: Colors.black,
-                      alignment: Alignment.bottomLeft,
-                    ),
-                  ],
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
-            );
-          },
-          separatorBuilder: (context, index) => SizedBox(
-            width: 20,
-          ),
+            ),
+            Positioned(
+              bottom: 125,
+              right: 20,
+              child: FloatingActionButton(
+                heroTag: null,
+                mini: true,
+                backgroundColor: Colors.deepOrange,
+                child: Icon(Icons.chevron_right),
+                onPressed: () {
+                  // Handle onPressed event here
+                  print('FloatingActionButton Pressed');
+                },
+              ),
+            ),
+            Positioned(
+              bottom: 150,
+              left: 20,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    'Family House',
+                    style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Icon(Icons.location_on, color: Colors.white),
+                      Text(
+                        'El Agamy-Alexandria',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
-      );
-    }
+      ),
+    );
   }
-}
 
-class HomeAppBar extends StatelessWidget implements PreferredSizeWidget {
-  @override
-  Size get preferredSize => AppBar().preferredSize;
 
-  @override
-  Widget build(BuildContext context) {
-    return AppBar(
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {
-              // Add your left icon action here
-            },
-          ),
-          Image.asset(
-            'assets/timme.jpeg',
-            height: 60,
-          ),
-          IconButton(
-            icon: Icon(Icons.shopping_cart),
-            onPressed: () {
-
-            },
-          ),
+  Widget _selectedWidget(Icon icon, String str) {
+    return Container(
+      padding: EdgeInsets.all(10.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          bottomLeft: Radius.circular(20.0),
+          bottomRight: Radius.circular(20.0),
+        ),
+        color: Colors.purple.withOpacity(.4),
+      ),
+      child: Row(
+        children: <Widget>[
+          icon,
+          Text(str),
         ],
       ),
     );
   }
 }
-
-class CustomText extends StatelessWidget {
-  final String text;
-  final double fontSize;
-
-  const CustomText({required this.text, required this.fontSize});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(fontSize: fontSize),
-    );
-  }
+void _navigateToProfilePage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ProfilePage()), // Ensure correct class name
+  );
 }
 
-class Drinks {
-  int? id;
-  String? coffeeName;
-  String? coffeeDesc;
-  String? coffeePrice;
-  String? coffeeFlavor;
-  bool? isWithMarshmello;
-  bool? isWithDonuts;
-  bool? isAvailable;
-  String? coffeeSize;
-
-  Drinks({
-    this.id,
-    this.coffeeName,
-    this.coffeeDesc,
-    this.coffeePrice,
-    this.coffeeFlavor,
-    this.isWithMarshmello,
-    this.isWithDonuts,
-    this.isAvailable,
-    this.coffeeSize,
-  });
-
-  factory Drinks.fromJson(Map<String, dynamic> json) {
-    return Drinks(
-      id: json['id'],
-      coffeeName: json['coffeeName'],
-      coffeeDesc: json['coffeeDesc'],
-      coffeePrice: json['coffeePrice'],
-      coffeeFlavor: json['coffeeFlavor'],
-      isWithMarshmello: json['isWithMarshmello'],
-      isWithDonuts: json['isWithDonuts'],
-      isAvailable: json['isAvailable'],
-      coffeeSize: json['coffeeSize'],
-    );
-  }
+void _navigateToContactUsPage(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => ContactUsPage()), // Ensure correct class name
+  );
 }
+
+

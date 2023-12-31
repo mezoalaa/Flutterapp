@@ -3,12 +3,7 @@ import 'package:flutter/material.dart';
 import 'SignUpPage.dart';
 import 'login.dart';
 
-void main() => runApp(
-  MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: beginingPage(),
-  ),
-);
+
 
 class beginingPage extends StatelessWidget {
   @override
